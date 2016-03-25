@@ -29,23 +29,21 @@ ext {
     // revision = git.head().abbreviatedId
 }
 
-name = "spark-template"
-
 // Use abbreviatedId commit id in the version.
 version = "0.1.${git.head().abbreviatedId}"
 
 
-task jarlegacy(type: Jar) {
+task fatjar(type: Jar) {
     doFirst {
         from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
     }
     exclude 'META-INF/*.RSA', 'META-INF/*.SF','META-INF/*.DSA'
     manifest {
-        attributes 'Implementation-Title': 'spark-template',
+        attributes 'Implementation-Title': 'sparktemplate',
                 'Implementation-Version': version,
-                'Main-Class': 'com.github.dbehnke.spark-template'
+                'Main-Class': 'com.github.dbehnke.sparktemplate.HelloWorld'
     }
-    baseName = name
+    baseName = "sparktemplate"
     with jar
 }
 
@@ -75,7 +73,7 @@ dependencies {
     compile 'org.projectlombok:lombok:' + version_lombok
     compile 'com.fasterxml.jackson.core:jackson-databind:' + version_jackson
     compile 'com.sparkjava:spark-core:' + version_spark
-    compile 'com.zaxxer:HikariCP:' + version_hikariCP
+    compile 'com.zaxxer:HikariCP:' + version_hikaricp
     compile 'org.jdbi:jdbi:' + version_jdbi
     compile fileTree(dir: 'libs', include: '*.jar')
 }
