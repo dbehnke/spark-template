@@ -7,7 +7,7 @@ The goal was to create a simple HelloWorld application that could be run standal
 
 ## Quickstart
 
-1. Install Java - http://java.com
+1. Install Java - http://java.com (you need the JDK not JRE to compile)
 
 2. Install Gradle - https://gradle.org/gradle-download/
 
