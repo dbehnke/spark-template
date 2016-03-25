@@ -1,0 +1,82 @@
+buildscript {
+
+    repositories {
+        jcenter()
+    }
+
+    dependencies {
+        // Add dependency for build script,
+        // so we can access Git from our
+        // build script.
+        classpath 'org.ajoberstar:grgit:1.5.0'
+    }
+
+}
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+ext {
+    // Open the Git repository in the current directory.
+    git = org.ajoberstar.grgit.Grgit.open(file('.'))
+
+    // Get commit id of HEAD.
+    revision = git.head().id
+    // Alternative is using abbreviatedId of head() method.
+    // revision = git.head().abbreviatedId
+}
+
+name = "spark-template"
+
+// Use abbreviatedId commit id in the version.
+version = "0.1.${git.head().abbreviatedId}"
+
+
+task jarlegacy(type: Jar) {
+    doFirst {
+        from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    }
+    exclude 'META-INF/*.RSA', 'META-INF/*.SF','META-INF/*.DSA'
+    manifest {
+        attributes 'Implementation-Title': 'spark-template',
+                'Implementation-Version': version,
+                'Main-Class': 'com.github.dbehnke.spark-template'
+    }
+    baseName = name
+    with jar
+}
+
+uploadArchives {
+    repositories {
+        flatDir {
+            dirs 'output'
+        }
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+
+def version_hikaricp = "2.4.5"
+def version_jdbi = "2.72"
+def version_spark = "2.3"
+
+def version_jackson = "2.7.1"
+def version_lombok = "1.16.8"
+def version_freemarker = "2.3.23"
+
+dependencies {
+    compile 'org.freemarker:freemarker:' + version_freemarker
+    compile 'org.projectlombok:lombok:' + version_lombok
+    compile 'com.fasterxml.jackson.core:jackson-databind:' + version_jackson
+    compile 'com.sparkjava:spark-core:' + version_spark
+    compile 'com.zaxxer:HikariCP:' + version_hikariCP
+    compile 'org.jdbi:jdbi:' + version_jdbi
+    compile fileTree(dir: 'libs', include: '*.jar')
+}
+
