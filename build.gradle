@@ -14,7 +14,8 @@ buildscript {
 }
 
 apply plugin: 'java'
-apply plugin: 'eclipse'
+apply plugin: 'idea'
+apply plugin: 'war'
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
@@ -41,10 +42,15 @@ task fatjar(type: Jar) {
     manifest {
         attributes 'Implementation-Title': 'sparktemplate',
                 'Implementation-Version': version,
-                'Main-Class': 'com.github.dbehnke.sparktemplate.HelloWorld'
+                'Main-Class': 'com.github.dbehnke.sparktemplate.WebApp'
     }
     baseName = "sparktemplate"
+    
     with jar
+}
+
+war {
+  baseName = "sparktemplate"
 }
 
 uploadArchives {
